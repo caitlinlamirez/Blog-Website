@@ -1,0 +1,25 @@
+{% extends 'landing/base.html' %}
+{% block content %}
+
+<!-- REGISTER FORM-->
+{% if form.errors %}
+<div class="alert alert-dismissible alert-secondary">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    There was an error with your form
+</div>
+{% endif %}
+{% if messages %}
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+{% endif %}
+<form action="{% url 'register' %}" method=POST>
+  {% csrf_token %}
+  <h5>Sign up for an Account</h5>
+  {{form.as_p}}
+  <div class="text-center pt-1 mb-5 pb-1">
+    <input type="submit" class="btn btn-primary btn-block fa-lg mb-3" value="Submit">
+    <a class="btn btn-secondary btn-block fa-lg mb-3" href="{% url 'login' %}">Back</a>
+  </div>
+</form>
+{% endblock content %}
