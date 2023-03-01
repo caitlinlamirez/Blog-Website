@@ -19,7 +19,7 @@ def login_user(request):
             messages.success(request, "Success!")
             login(request, user)
             # Redirect to login url
-            return redirect('login')
+            return redirect('dashboard')
             
         # Invalid login
         else:

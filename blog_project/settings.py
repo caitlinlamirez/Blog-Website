@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'landing',
+    'social',
     
     'django.contrib.admin',
     'django.contrib.auth',
