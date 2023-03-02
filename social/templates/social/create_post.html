@@ -1,0 +1,95 @@
+{% extends 'social/base.html' %}
+{% block content %}
+
+    <!------------ LEFT CONTAINER ------------ -->
+    <div class="col-lg-9">
+        <div class="container py-0 h-200">
+            <h1>
+                <i class="fa-solid fa-pen fa-lg"></i> Create a Post
+            </h1><br>
+            <form method="POST" class="w-75">
+                {% csrf_token %} 
+                {{ form.as_p }}
+
+
+                <br><p>How was your day? </p>
+                <div class="rating">
+                    <style>
+                        .rating
+                        {
+                            position: absolute;
+                            top: 89%;
+                            left: 25%;
+                            transform: translate(-50%, -50%) rotateY(180deg);
+                            display: flex;
+                        }
+                        .rating label 
+                        {
+                            cursor: pointer;
+                            width: 55px;
+                        }
+                        .rating input 
+                        {
+                            display: none;
+                        }
+
+                        .rating label::before
+                        {
+                            content: '\f7b6';
+                            font-family: fontAwesome;
+                            font-size: 50px;
+                            color: #3b3b3b;
+                            position: relative;
+                            display: block;
+                            
+                        }
+                        .rating label::after
+                        {
+                            content: '\f7b6';
+                            font-family: fontAwesome;
+                            font-size: 50px;
+                            color: #ffbd4c;
+                            position: absolute;
+                            display: block;
+                            opacity: 0;
+                            top: 0;
+                            transition: .5s; 
+                            text-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+                            
+                        }
+
+                        .rating label:hover:after,
+                        .rating label:hover ~ label:after,
+                        .rating input:checked ~ label:after
+                        {
+                            opacity: 1
+                        }
+                    </style>
+                    <input type="radio" name = "star" id = "star1"><label for="star1"></label>
+                    <input type="radio" name = "star" id = "star2"><label for="star2"></label>
+                    <input type="radio" name = "star" id = "star3"><label for="star3"></label>
+                    <input type="radio" name = "star" id = "star4"><label for="star4"></label>
+                    <input type="radio" name = "star" id = "star5"><label for="star5"></label>
+                  </div>
+            <br>
+            <button type="button" class="btn btn-primary">Post</button>
+            
+
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+{% block right_navigation %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dashboard' %}">
+    <i class="fa-solid fa-rss"></i> News Feed
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="{% url 'create_post' %}">
+        <i class="fa-solid fa-pen"></i> Create a New Post
+        </a>
+    </li>
+{% endblock right_navigation %}
