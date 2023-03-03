@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'landing',
     'social',
+    'widget_tweaks',
     
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,3 +1,4 @@
+{% load widget_tweaks %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,12 +13,45 @@
             .day-info {
                 display: inline-block;
             }
-            .mug {
-                transform: rotateY(180deg)
-            }
             .checked {
                 color: orange;
             }
+
+            .rating-day input {
+                display: none;
+            }
+
+            .rating-day {
+                display: inline-block;
+                border:0;
+                padding-top: 5px;
+            }
+
+            .rating-day label {
+                float:right;
+            }
+            .rating-day label:before{
+                display:inline-block;
+                font-size: 20px;
+                font-family: FontAwesome;
+                content: '\f7b6';
+                margin:0;
+                padding:5px ;
+                cursor: pointer;
+            }
+
+            input:checked ~ label, label:hover ~ label{
+                color:orange;
+            }
+            
+            input:checked + label:hover, input:checked ~ label.hover, input:checked ~ label:hover ~ label,
+            label:hover ~ input:checked ~ label {
+                color:orange;
+            }
+            textarea {
+                resize: none;
+            }
+
         </style>
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div class="container-fluid">

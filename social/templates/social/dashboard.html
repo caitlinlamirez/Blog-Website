@@ -4,10 +4,9 @@
     <!------------ LEFT CONTAINER ------------ -->
     <div class="col-lg-9">
         <div class="container py-0 h-200">
-            <h1>
+            <h2 class="mb-4">
                 <i class="fa-solid fa-rss fa-lg"></i> News Feed
-            </h1><br>
-
+            </h2>
             {% for post in object_list %}
                 <div class="card mb-3">
                     <h3 class="card-header">{{post.title}}</h3>
