@@ -1,0 +1,70 @@
+body {
+    background-color: white;
+  }
+
+.day-info {
+    display: inline-block;
+}
+.checked {
+    color: orange;
+}
+
+.rating-day input {
+    display: none;
+}
+
+.rating-day {
+    display: inline-block;
+    padding-top: 5px;
+}
+
+.rating-day label {
+    float:right;
+}
+.rating-day label:before{
+    display:inline-block;
+    font-size: 23px;
+    font-family: FontAwesome;
+    content: '\f7b6';
+    margin:0;
+    padding:2px ;
+    cursor: pointer;
+}
+
+input:checked ~ label, label:hover ~ label{
+    color:orange;
+}
+
+input:checked + label:hover, input:checked ~ label.hover, input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label {
+    color:orange;
+}
+textarea {
+    resize: none;
+}
+
+.dropdown-menu {
+    min-width:inherit;
+}
+
+.profile-pic {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    padding: 15px;
+    filter: drop-shadow(0 0 0.75rem gray);
+}
+.profile-side{
+    text-align: center;
+    padding-bottom: 2%;
+}
+
+.small-profile-pic {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+}
+

@@ -1,24 +1,32 @@
 {% extends 'social/base.html' %}
-{% block content %}
 
+{% block title %}
+<title>Dashboard</title>
+{% endblock title %}
+
+{% block content %}
     <!------------ LEFT CONTAINER ------------ -->
     <div class="col-lg-9">
         <div class="container py-0 h-200">
             <h2 class="mb-4">
                 <i class="fa-solid fa-rss fa-lg"></i> News Feed
             </h2>
-            {% for post in object_list %}
+
+            <!-- POSTS -->
+            {% for post in posts %}
                 <div class="card mb-3">
-                    <h3 class="card-header">{{post.title}}</h3>
+                    <h3 class="card-header">
+                        {{post.title}}
+                    </h3>
                     <div class="card-body">
-                    <h5 class="card-title mb-3"> written by {{ post.author }}</h5>
+                    <h5 class="card-title mb-3"> <img class="small-profile-pic" src="{{ post.author.profile.image.url}}">{{ post.author }}</h5>
                     <h6 class="card-title mb-3"> {{ post.post_date }}</h6>
                     <div class = "day_rating">
                         <div class="day-info">
                             <h6 class="card-subtitle text-muted"> Day Rating:</h6>
                         </div>
                         <div class="day-info">
-                            <div class="stars">
+                            <div class="stars mb-3">
                                 <span class="mug fa fa-mug-hot{% if post.rating > 0 %} checked {% endif %}"></span>
                                 <span class="mug fa fa-mug-hot {% if post.rating > 1 %} checked {% endif %}"></span>
                                 <span class="mug fa fa-mug-hot {% if post.rating > 2 %} checked {% endif %}"></span>
@@ -26,18 +34,15 @@
                                 <span class="mug fa fa-mug-hot {% if post.rating > 4 %} checked {% endif %}"></span>
                             </div>
                         </div>
-                        
                     </div>
-                        
-                    
-
-                    </div>
-                    <div class="card-body">
                     <p class="card-text">{{ post.body }}</p>
-                    </div>
-                    <div class="card-body">
-                    <a href="#" class="card-link">Like</a>
-                    <a href="#" class="card-link">Comment</a>
+
+                    <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fa-regular fa-heart"></i> Like
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm">
+                        <i class="fa-regular fa-comment"></i> Comment
+                    </button>
                     </div>
                     <div class="card-footer text-muted">
                     {{ post.duration }}
@@ -47,19 +52,13 @@
         
         </div>
     </div>
-
-
 {% endblock content %}
 
-{% block right_navigation %}
-<li class="nav-item">
-    <a class="nav-link active" href="{% url 'dashboard' %}">
-    <i class="fa-solid fa-rss"></i> News Feed
-    </a>
+{% block view_profile %}
+<!-- Profile Picture -->
+<li class="profile-side">
+<img class="profile-pic" src="{{ user.profile.image.url }}">
+<h5>{{ user.first_name }} {{ user.last_name }}</h5>
+<a type="button" class="btn btn-link" href="{% url 'current_profile' user.username%}">View Profile</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'create_post' %}">
-        <i class="fa-solid fa-pen"></i> Create a New Post
-        </a>
-    </li>
-{% endblock right_navigation %}
+{% endblock view_profile %}

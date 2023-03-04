@@ -1,33 +1,34 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth import authenticate, login
 from django.contrib import messages 
-from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterUserForm
 
 
 def login_user(request):
-    if request.method == "POST":
-        # Takes input we got from the html file and store them
-        username = request.POST['username']
-        password = request.POST['password']
-        
-        # Sees if they are correct
-        user = authenticate(request, username=username, password=password)
-        
-        # Valid login
-        if user is not None:
-            messages.success(request, "Success!")
-            login(request, user)
-            # Redirect to login url
-            return redirect('dashboard')
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            # Takes input we got from the html file and store them
+            username = request.POST['username']
+            password = request.POST['password']
             
-        # Invalid login
+            # Sees if they are correct
+            user = authenticate(request, username=username, password=password)
+            
+            # Valid login
+            if user is not None:
+                login(request, user)
+                # Redirect to login url
+                return redirect('dashboard')
+                
+            # Invalid login
+            else:
+                messages.success(request, "There was an error logging in!")
+                # Return an 'invalid login' error message.
+                return redirect('login')
         else:
-            messages.success(request, "There was an error logging in!")
-            # Return an 'invalid login' error message.
-            return redirect('login')
+            return render(request, 'landing/login.html', {}) 
     else:
-        return render(request, 'landing/login.html', {}) 
+        return redirect('dashboard')
     
     
 def register_user(request):
@@ -44,7 +45,6 @@ def register_user(request):
             # Logs them in
             user = authenticate(username=username, password=password)
             login (request, user)
-            messages.success(request, "Registration and Login successful!")
             return redirect('login')
     else:
         # Pass in the form
@@ -52,3 +52,4 @@ def register_user(request):
     return render(request, 'landing/register.html', {
         'form': form,
     })
+    

@@ -1,17 +1,22 @@
 {% extends 'social/base.html' %}
-{% block content %}
 
+{% block title %}
+<title>Create a Post</title>
+{% endblock title %}
+
+{% block content %}
     <!------------ LEFT CONTAINER ------------ -->
     <div class="col-lg-9">
         <div class="container py-0 h-200">
             <h2>
                 <i class="fa-solid fa-pen fa-lg"></i> Create a Post
             </h2>
+    
             <form action="" method="POST">
                 {% csrf_token %} 
                 <div class="form-group">
                     <label for="inputTitle" class="form-label mt-3">Post Title</label>
-                    <input type="text" class="form-control" id="inputTitle" name="title">
+                    <input type="text" class="form-control" id="inputTitle" name="title" placeholder="Give your post an interesting title">
                 </div>
                 <div class="form-group">
                     <label for="bodyTextarea" class="form-label mt-4">Write Your Post</label>
@@ -19,33 +24,26 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label mt-4">How Was Your Day?</label><br>
+                    <small>Tell us how your day went with a rating!</small><br>
                     <div class="rating-day mb-2">
                         <input type="radio" name = "rating" id = "rating5" value="5"><label for="rating5"></label>
                         <input type="radio" name = "rating" id = "rating4" value="4"><label for="rating4"></label>
                         <input type="radio" name = "rating" id = "rating3" value="3"><label for="rating3"></label>
                         <input type="radio" name = "rating" id = "rating2" value="2"><label for="rating2"></label>
                         <input type="radio" name = "rating" id = "rating1" value="1"><label for="rating1"></label>
-                
                     </div>
                 </div>
                 <input type="submit" class="btn btn-primary" value="Upload Post">
-            
-
+            </form>
         </div>
     </div>
-
-
 {% endblock content %}
 
-{% block right_navigation %}
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'dashboard' %}">
-    <i class="fa-solid fa-rss"></i> News Feed
-    </a>
+{% block view_profile %}
+<!-- Profile Picture -->
+<li class="profile-side">
+<img class="profile-pic" src="{{ user.profile.image.url }}">
+<h5>{{ user.first_name }} {{ user.last_name }}</h5>
+<a type="button" class="btn btn-link" href="{% url 'current_profile' user.username%}">View Profile</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link active" href="{% url 'create_post' %}">
-        <i class="fa-solid fa-pen"></i> Create a New Post
-        </a>
-    </li>
-{% endblock right_navigation %}
+{% endblock view_profile %}

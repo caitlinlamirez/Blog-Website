@@ -1,0 +1,25 @@
+{% extends 'social/base.html' %}
+{% include 'social/nav_menu.html' %}
+
+{% block content %}
+<div class="col-lg-9">
+    <div class="container py-0 h-200 ">
+        <div class="card border-primary mb-3" style="max-width: 60rem;">
+            <div class="card-header">Your Profile</div>
+            <div class="card-body">
+              <h4 class="card-title">{{ user.first_name }} {{ user.last_name }}</h4>
+              <img class="profile-pic" src="{{ user.profile.image.url }}">
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block view_profile %}
+<li class="nav-item">
+    <a class="nav-link {% if url_name == 'current_profile' %}active{% endif %}" href="{% url 'current_profile' user.username %}">
+        <i class="fa-solid fa-user"></i> Profile Page
+    </a>
+  </li>
+{% endblock view_profile %}
