@@ -6,6 +6,8 @@ from .forms import PostForm
 from django.contrib.auth import logout 
 from django.contrib import messages 
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import datetime
 
 @login_required
 def logout_user(request):
@@ -41,10 +43,33 @@ def create_post(request):
 def current_profile_view(request, username):
     # If the username matches the current user logged in
     if username == request.user.username:
-        return render(request, 'social/current_profile.html', {})
+        user_posts = Post.objects.filter(author=request.user)
+        user_posts = user_posts.order_by('-post_date')
+        return render(request, 'social/current_profile.html', 
+        {
+            'posts': user_posts
+        })
     
     # Otherwise redirect to the dashboard
     else:
         return redirect('dashboard')
                 
-                
+@login_required 
+def edit_post_view(request, post_id):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            data = Post.objects.get(id=post_id)
+            data.author = request.user
+            data.title = form.cleaned_data['title']
+            data.body = form.cleaned_data['body']
+            data.rating = form.cleaned_data['rating']
+            data.post_date = datetime.now()
+            data.save()
+            return redirect('dashboard')
+    else:
+        post = Post.objects.get(id=post_id)
+        form = PostForm()
+        return render(request, 'social/edit_post.html', {
+            'post': post
+        }) 

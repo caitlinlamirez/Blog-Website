@@ -1,18 +1,146 @@
 {% extends 'social/base.html' %}
 {% include 'social/nav_menu.html' %}
 
+{% block title %}
+<title>Your Profile</title>
+{% endblock title %}
+
 {% block content %}
 <div class="col-lg-9">
-    <div class="container py-0 h-200 ">
-        <div class="card border-primary mb-3" style="max-width: 60rem;">
-            <div class="card-header">Your Profile</div>
-            <div class="card-body">
-              <h4 class="card-title">{{ user.first_name }} {{ user.last_name }}</h4>
-              <img class="profile-pic" src="{{ user.profile.image.url }}">
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <!-- PROFILE WIDET -->
+        <div class="bg-white shadow rounded overflow-hidden">
+            <style>
+                .profile-header {
+                    transform: translateY(5rem);
+                }
+
+                .pic-header{
+                    object-fit: cover;
+                    border-radius: 50%;
+                    width: 170px;
+                    height: 170px;
+                    padding: 2px;
+                    border: 2px solid #ccc;
+                    background: #eee;
+                }
+
+                .display-name-header {
+                    padding-left: 15px;
+                    padding-top:10px;
+                    text-align: left;
+                    display: block;
+                }
+
+                .bg-header {
+                    
+                    background-repeat:no-repeat;
+                    background-position: center center;
+                    background-size:cover;
+
+                }
+
+                .no-underline{
+                    text-decoration: none;
+                }
+                .follow{
+                    text-align: left;
+                }
+
+                .edit-post-btn{
+                    background-color: aqua;
+                }
+
+                .alignleft {
+                    float: left;
+                }
+                .alignright {
+                    float: right;
+                }
+                .time-footer{
+                    padding-top: 8px;
+                }
+            </style>
+
+            <!-- PROFILE PIC AND HEADER -->
+            <div class="px-4 pb-4 bg-header" style="background-image: url('{{ user.profile.header.url }}')">
+                <div class="media align-items-end profile-header">
+                    <div class="media-body">
+                        <img class="pic-header" src="{{ user.profile.image.url }}">
+                    </div>
+                </div>
             </div>
-          </div>
-    </div>
+
+            <!-- PROFILE -->
+            <div class="bg-light p-3 pt-5 text-center">
+                <div class="display-name-header">
+                    <h5>{{ user.first_name }} {{ user.last_name }} </h5>
+                    <h6>@{{user.username}}</h6>
+                    <p>{{user.profile.bio}}</p>
+                </div>
+                <div class="follow">
+                    <button type="button" class="btn btn-link no-underline">
+                        <strong>257</strong> Following
+                    </button>
+                    <button type="button" class="btn btn-link no-underline">
+                        <strong>200</strong> Followers
+                    </button>
+                </div>
+                
+            </div>
+
+            <div class="py-4 px-4">
+                <div class="py-2">
+                    <h5 class="mb-3">Recent posts</h5>
+                    <!-- EACH POST -->
+                    {% for post in posts %}
+                    <div class="card mb-3">
+                        <h3 class="card-header">
+                            {{post.title}}
+                        </h3>
+                        <div class="card-body">
+                        <h5 class="card-title mb-3"> 
+                            <img class="small-profile-pic" src="{{ post.author.profile.image.url}}">
+                            {{ post.author }}
+                        </h5>
+                        <h6 class="card-title mb-3"> {{ post.post_date }}</h6>
+                        <div class = "day_rating">
+                            <div class="day-info">
+                                <h6 class="card-subtitle text-muted"> Day Rating:</h6>
+                            </div>
+                            <div class="day-info">
+                                <div class="stars mb-3">
+                                    <span class="mug fa fa-mug-hot{% if post.rating > 0 %} checked {% endif %}"></span>
+                                    <span class="mug fa fa-mug-hot {% if post.rating > 1 %} checked {% endif %}"></span>
+                                    <span class="mug fa fa-mug-hot {% if post.rating > 2 %} checked {% endif %}"></span>
+                                    <span class="mug fa fa-mug-hot {% if post.rating > 3 %} checked {% endif %}" ></span>
+                                    <span class="mug fa fa-mug-hot {% if post.rating > 4 %} checked {% endif %}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-text">{{ post.body }}</p>
+    
+                        <button type="button" class="btn btn-primary btn-sm">
+                            <i class="fa-regular fa-heart"></i> Like
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa-regular fa-comment"></i> Comment
+                        </button>
+                        </div>
+                        <div class="card-footer">
+                            <div class="time-footer alignleft">
+                                <span class="text-muted">{{ post.duration }}</span>
+                            </div>
+                            
+                            <a type="button" class="btn btn-link btn-small no-underline alignright" href="{% url 'edit_post' post.pk %}">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit Post
+                            </a>
+                                
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div><!-- End profile widget -->
 </div>
 {% endblock content %}
 

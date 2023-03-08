@@ -23,11 +23,11 @@ body {
 }
 .rating-day label:before{
     display:inline-block;
-    font-size: 23px;
+    font-size: 25px;
     font-family: FontAwesome;
     content: '\f7b6';
     margin:0;
-    padding:2px ;
+    padding:2px;
     cursor: pointer;
 }
 
@@ -50,8 +50,8 @@ textarea {
 .profile-pic {
     object-fit: cover;
     border-radius: 50%;
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     padding: 15px;
     filter: drop-shadow(0 0 0.75rem gray);
 }
@@ -67,4 +67,7 @@ textarea {
     height: 40px;
     margin-right: 5px;
 }
+
+
+
 

@@ -9,10 +9,13 @@ from django.db.models.signals import post_save
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpeg',upload_to='profile_pics')
+    header = models.ImageField(default='default_header.png', upload_to='header_pics')
+    bio = models.TextField(default='Welcome to my profile!')
     
     
     def __str__(self):
         return f'{self.user.username} Profile'
+    
 
 # Create Profile when a new user signs up
 def create_profile(sender, instance, created, **kwargs):
@@ -26,7 +29,7 @@ post_save.connect(create_profile, sender=User)
 class Post(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE) # Deletes all of the user's posts if they delete the user
-    rating = models.IntegerField()
+    rating = models.IntegerField(default=0)
     body = models.TextField() 
     post_date = models.DateTimeField(default=timezone.now)
     
