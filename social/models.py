@@ -10,8 +10,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpeg',upload_to='profile_pics')
     header = models.ImageField(default='default_header.png', upload_to='header_pics')
-    bio = models.TextField(default='Welcome to my profile!')
-    
+    bio = models.TextField(default='Welcome to my profile!', max_length=160)
+    follows = models.ManyToManyField("self",
+            related_name="followed_by",
+            symmetrical=False,
+            blank=True) # User does not have to follow anybody
     
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -37,8 +40,7 @@ class Post(models.Model):
     def duration(self):
         if self.post_date:
             time  = datetime.now() 
-            if self.post_date.hour == time.hour:
-                
+            if self.post_date.hour == time.hour and self.post_date.day == time.day:
                 if time.minute - self.post_date.minute != 1:
                     return str(time.minute - self.post_date.minute) + " minutes ago"
                 else:
