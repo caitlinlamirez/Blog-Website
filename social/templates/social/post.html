@@ -1,0 +1,164 @@
+<div class="card mb-3">
+    <!-- Card Header -->
+        <div class="card-header">
+            <a class="no-underline" href="{% url 'view_post' post.pk%}"><h5 class="post-title alignleft mt-2">{{post.title}}</h5></a>
+
+            <!-- Drop down menu for user who is logged in-->
+            {% if user.username == post.author.username %}
+            <div class="btn-group alignright" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                  <button id="btnGroupDrop1" type="button" class="btn btn-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-ellipsis-vertical fa-lg"></i>
+                </button>
+                  <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="{% url 'edit_post' post.pk %}">Edit Post</a>
+                    <a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Post</a>
+                  </div>
+                </div>
+            </div>
+            {% endif %}
+
+        <!-- Delete dialogue modal -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-dialog" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Post Deletion Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <p>Are you sure you want to delete this post?</p>
+                </div>
+                <div class="modal-footer">
+                    <!-- Delete Post Form -->
+                    <form method="POST" action="{% url 'delete_post' post.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary" name="delete_button" value="delete">Delete</button>
+                    </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        </div>
+    
+    <!-- Card Body -->
+    <div class="card-body">
+        <!-- Profile Picture and Username-->
+        <a class="no-underline" href="{% url 'user_profile' post.author%}">
+            <div>
+                <h5 class="card-title">
+                    <img class="small-profile-pic" src="{{ post.author.profile.image.url}}">
+                    {{ post.author }}
+                </h5>
+            </div>
+        </a>
+
+        <!-- Date-->
+        <div class="hover-text text-muted alignright">
+            <h6>{{ post.duration}}</h6>
+            <span class="tooltip-text" id="top">{{ post.post_date}}</span>
+        </div>
+
+        <!-- Day Rating-->
+        <div class = "day_rating">
+            <div class="day-info">
+                <h6 class="card-subtitle text-muted"> Day Rating:</h6>
+            </div>
+            <div class="day-info">
+                <div class="stars mb-3">
+                    <span class="mug fa fa-mug-hot{% if post.rating > 0 %} checked {% endif %}"></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 1 %} checked {% endif %}"></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 2 %} checked {% endif %}"></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 3 %} checked {% endif %}" ></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 4 %} checked {% endif %}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actual Post Content -->
+        <p class="card-text">{{ post.body }}</p>
+        
+        <!-- Like and Comment Counts-->
+        <div class="alignleft">
+            <a data-bs-toggle="modal" data-bs-target="#modal{{ post.pk }}">
+                <span class="m-1 like" ><i class="fa-solid fa-heart fa-lg"></i> {{ post.likes.count }} Likes</span>
+            </a>
+            
+        </div>
+        <a class="no-underline alignright" href="{% url 'view_post' post.pk%}">
+            <span>{{ post.comments.count }} comments</span>
+        </a>
+
+        <!-- Like Lists modal -->
+        <div id="modal{{ post.pk }}" class="modal fade">
+        <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Users who have liked this post</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"></span>
+            </button>
+            </div>
+            <div class="modal-body">
+
+            {% for user in post.likes.all %}
+            
+                <li class="list-group-item p-2">
+                <div>
+                <!-- Profile picture, full name, and user name-->
+                <a class= "no-underline" href="{% url 'user_profile' user.username %}">
+                <div class="followers">
+                    <img class="small-profile-pic alignleft" src="{{ user.profile.image.url}}">
+                </div>
+                <div class="followers">
+                    <strong>{{ user.first_name }} {{ user.last_name }}</strong><br>
+                    <small>@{{ user.username }}</small>
+                </div>
+                </a>
+                </div>
+                </li> 
+            {% endfor %}
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+        </div>
+    </div>
+        
+        
+    </div>
+
+    <!-- Card Footer-->
+    <div class="card-footer">
+        <div class=" alignleft">
+            <!-- Like Form-->
+            <form action="{% url 'like_post' post.pk%}" method="POST">
+                {% csrf_token %}
+
+                <!-- If: logged in user already likes the post, clicking button will UNLIKE post -->
+                {% if user in post.likes.all %}
+                <button type="submit" id = "unlike_bt" name = "like_button" value = "unlike"class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-heart fa-lg"></i> Unlike</button>
+
+                <!-- Else: logged in user has not liked post, clicking button will LIKE post -->
+                {% else %}
+                <button type="submit" id = "like_bt" name = "like_button" value = "like"class="btn btn-outline-primary btn-sm">
+                    <i class="fa-regular fa-heart fa-lg"></i> Like</button>
+                {% endif %}
+
+                <a type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'view_post' post.pk%}">
+                <i class="fa-regular fa-comment fa-lg"></i> Comment
+                </a>
+            </form>
+        </div>
+        
+    </div>
+
+</div>

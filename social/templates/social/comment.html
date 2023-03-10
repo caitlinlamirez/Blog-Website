@@ -1,0 +1,89 @@
+<div class="card border-secondary mb-3 mt-3">
+    <!-- Card Body -->
+    <div class="card-body">
+        <!-- Profile Picture and Username-->
+        <a class="no-underline" href="{% url 'user_profile' comment.commenter.username%}">
+            <div>
+                <h5 class="card-title mb-3">
+                <img class="small-profile-pic" src="{{ comment.commenter.profile.image.url}}">{{ comment.commenter.username }}
+                </h5>
+            </div>
+        </a>
+
+        <!-- Date-->
+        <div class="hover-text text-muted alignright">
+            <h6>{{ comment.duration}}</h6>
+            <span class="tooltip-text" id="top">{{ comment.comment_date}}</span>
+        </div>
+
+
+        <!-- Like and Comment Button-->
+        <p class="card-text">{{comment.body}}</p>
+        
+        <!-- Like and Comment Counts-->
+        <div class="alignleft">
+            <a data-bs-toggle="modal" data-bs-target="#modal{{ comment.pk }}">
+                <span class="m-1 like" ><i class="fa-solid fa-heart fa-lg"></i> {{ comment.likes.count }} Likes</span>
+            </a>
+        </div>
+
+        <!-- Comment's Like Lists modal -->
+        <div id="modal{{ comment.pk }}" class="modal fade">
+            <div class="modal-dialog" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Users who have liked this comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+                </div>
+                <div class="modal-body">
+    
+                {% for user in comment.likes.all %}
+                
+                    <li class="list-group-item p-2">
+                    <div>
+                    <!-- Profile picture, full name, and user name-->
+                    <a class= "no-underline" href="{% url 'user_profile' user.username %}">
+                    <div class="followers">
+                        <img class="small-profile-pic alignleft" src="{{ user.profile.image.url}}">
+                    </div>
+                    <div class="followers">
+                        <strong>{{ user.first_name }} {{ user.last_name }}</strong><br>
+                        <small>@{{ user.username }}</small>
+                    </div>
+                    </a>
+                    </div>
+                    </li> 
+                {% endfor %}
+                </div>
+    
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+    
+            </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Card Footer-->
+    <div class="card-footer">
+        <!-- Like Form-->
+        <form action="{% url 'like_comment' comment.pk%}" method="POST">
+            {% csrf_token %}
+            <!-- If: logged in user already likes the post, clicking button will UNLIKE post -->
+            {% if user in comment.likes.all %}
+            <button type="submit" id = "unlike_bt" name = "comment_like_button" value = "unlike"class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-heart"></i> Unlike</button>
+
+            <!-- Else: logged in user has not liked post, clicking button will LIKE post -->
+            {% else %}
+            <button type="submit" id = "like_bt" name = "comment_like_button" value = "like"class="btn btn-outline-primary btn-sm">
+                <i class="fa-regular fa-heart"></i> Like</button>
+            {% endif %}
+        </form>
+
+    </div>
+</div>

@@ -20,8 +20,10 @@
                         {% if request.user.username == profile_user.username %}
                             <button type="button" class="btn btn-primary alignright edit-profile-bt"> Edit Profile</button>
                         {% else %}
+
+
                         <!-- Otherwise, display Follow/Unfollow Button-->
-                        <form action= "" method="POST" class="alignright edit-profile-bt">
+                        <form action="{% url 'follow_user' profile_user.pk %}" method="POST" class="alignright edit-profile-bt">
                             {% csrf_token %}
                             <!-- If logged in user already follows the user on the profile display "Unfollow" -->
                             {% if profile in user.profile.follows.all %}
@@ -31,6 +33,8 @@
                             <button type="submit" class="btn btn-primary" name="follow_button" value="follow"> Follow</button>
                             {% endif %}
                         </form>
+
+                        
                         {% endif %}
                     </div>
                 </div>

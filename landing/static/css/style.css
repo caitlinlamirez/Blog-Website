@@ -1,12 +1,12 @@
 body {
-    background-color: white;
+    background-color: rgb(253, 246, 255);
   }
 
 .day-info {
     display: inline-block;
 }
 .checked {
-    color: orange;
+    color: rgb(255, 183, 76);
 }
 
 .rating-day input {
@@ -32,12 +32,12 @@ body {
 }
 
 input:checked ~ label, label:hover ~ label{
-    color:orange;
+    color:rgb(255, 183, 76);
 }
 
 input:checked + label:hover, input:checked ~ label.hover, input:checked ~ label:hover ~ label,
 label:hover ~ input:checked ~ label {
-    color:orange;
+    color:rgb(255, 183, 76);
 }
 textarea {
     resize: none;
@@ -124,6 +124,7 @@ textarea {
     display: inline-block;
     line-height: 18px;
 }
+
 a {
     color:inherit;
 }
@@ -133,3 +134,95 @@ a {
     padding-top: 10px;
 }
 
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+    width: 110px;
+    color: white;
+    font-size: 10px;
+    background-color: #192733;
+    border-radius: 10px;
+    padding: 8px 13px 8px 13px;
+}
+  
+.hover-text:hover .tooltip-text {
+visibility: visible;
+}
+  
+#top {
+top: -55px;
+left: -50%;
+}
+
+.hover-text {
+position: relative;
+text-align: center;
+}
+
+p, span{
+    font-family:sans-serif;
+    font-size: 14px;
+}
+
+h6 {
+font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+font-size: 15px;
+}
+
+h5{
+    font-family:sans-serif;
+    font-size: 17px;
+}
+
+a:hover{
+    color:rgba(120, 33, 134, 0.631);
+}
+
+
+
+.post-title {
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+.navbar-custom {
+    background-color: #bc8ed3;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #e493c2;
+}
+
+.nav-link {
+    color:rgb(60, 23, 90);
+}
+.nav-link:hover {
+    color:rgba(120, 33, 134, 0.631);
+}
+
+.btn-link {
+    color:rgb(75, 29, 113);
+}
+
+.like{
+    font-family:sans-serif;
+    font-size: 13px;
+    color:#c01e7c;
+}
+
+.like:hover{
+    color:rgba(120, 33, 134, 0.631);
+    cursor: pointer;
+}
+
+.comment {
+    font-family:sans-serif;
+    font-size: 13px;
+    color:#19ba82;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}

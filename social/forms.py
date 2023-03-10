@@ -1,4 +1,3 @@
-from typing import Text
 from django import forms
 from .models import Post
 

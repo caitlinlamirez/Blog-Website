@@ -33,7 +33,7 @@ class Post(models.Model):
     title = models.CharField(max_length=50)
     author = models.ForeignKey(User, on_delete=models.CASCADE) # Deletes all of the user's posts if they delete the user
     rating = models.IntegerField(default=0)
-    body = models.TextField(max_length=160) 
+    body = models.TextField(max_length=400) 
     post_date = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(User, related_name='blog_posts')
     

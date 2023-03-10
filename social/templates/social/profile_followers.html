@@ -27,25 +27,23 @@
 
                 <!-- If logged in user is NOT the user on the list, display follow/unfollow buttons-->
                 {% if user.username != follower.user.username %}
-                <form action= "" method="POST" class="followers alignright">
-                    {% csrf_token %}
 
-                    <!-- Hidden input field that would return the user on the list's username -->
-                    <input type="hidden" id = "target" name = "target_user" value= "{{ follower.user.username }}">
-                    
-                    <!-- If user on the list is in logged in user's follow list -->
+                <!-- Follow Form -->
+                <form action="{% url 'follow_user' follower.user.pk %}" method="POST" class="followers alignright">
+                    {% csrf_token %}
+                    <!-- If logged in user already follows the user on the profile display "Unfollow" -->
                     {% if follower.user.profile in user.profile.follows.all %}
-                    <button type="submit"class="btn btn-secondary btn-sm" name="follow_button2" value="unfollow"> Unfollow</button>
+                    <button type="submit"class="btn btn-secondary btn-sm" name="follow_button" value="unfollow"> Unfollow</button>
                     {% else %}
-                    <button type="submit" class="btn btn-primary btn-sm" name="follow_button2" value="follow"> Follow</button>
+                    <!-- Otherwise, display "Follow" -->
+                    <button type="submit" class="btn btn-primary btn-sm" name="follow_button" value="follow"> Follow</button>
                     {% endif %}
                 </form>
-                {% endif %}
-                
 
+
+                {% endif %}
             </div>
-        </li>
-        
+        </li>     
         {% endfor %}
 </ul>
 {% endblock profile_content %}

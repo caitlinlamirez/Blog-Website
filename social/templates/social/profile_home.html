@@ -3,7 +3,9 @@
 <div class="py-2">
     <h5 class="mb-3">Recent posts</h5>
     <!-- Display the cards for each of the user's posts -->
-    {% include 'social/post_cards.html' %}
+    {% for post in posts %}
+        {% include 'social/post.html' %}
+    {% endfor %}
     
 </div>
 {% endblock profile_content %}

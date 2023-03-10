@@ -22,21 +22,7 @@ def dashboard_view(request):
     context = {
         'posts': posts
     }
-    
-    # If user wants to delete a post
-    if request.method == "POST":
-        if "delete_button" in request.POST:
-            # Get Post ID 
-            post_id = request.POST['delete_button']
-            
-            # Get Post object using the Post ID
-            post_to_delete = Post.objects.get(id=post_id)
-            
-            # Delete Post
-            post_to_delete.delete()
-            return redirect(request.META['HTTP_REFERER'])
-    else:
-        return render(request, 'social/dashboard.html', context)
+    return render(request, 'social/dashboard.html', context)
     
 @login_required
 def create_post(request):
@@ -54,6 +40,31 @@ def create_post(request):
         form = PostForm()
     return render(request, 'social/create_post.html', {}) 
 
+@login_required 
+def edit_post_view(request, post_id):
+    current_post = Post.objects.get(id=post_id)
+    
+    # Checks if the post's author matches with the current user
+    if (current_post.author == request.user):
+        if request.method == "POST":
+            form = PostForm(request.POST)
+            if form.is_valid():
+                data = Post.objects.get(id=post_id)
+                data.author = request.user
+                data.title = request.POST['title']
+                data.body = request.POST['body']
+                data.rating = request.POST['rating']
+                data.save()
+            return redirect('view_post', post_id)
+        else:
+            form = PostForm()
+        return render(request, 'social/edit_post.html', 
+            {
+                'post': current_post
+            }) 
+    else:
+        return redirect('dashboard')
+    
 # Returns the context dictionary for the user profile
 def get_profile_context(username):
     # Get the User of the profile
@@ -87,139 +98,23 @@ def get_profile_context(username):
     # Return context
     return context
 
-# Is the logic behind the POST follow form
-def follow_form_logic(request, profile, button):
-    # Get current user
-    profile_logged_in_user = request.user.profile
-    
-    # Get form data
-    action = request.POST[button]
-    # Decide to follow or unfollow
-    if action == "unfollow":
-        # Unfollow user
-        profile_logged_in_user.follows.remove(profile)
-    elif action == "follow":
-        # Follow user
-        profile_logged_in_user.follows.add(profile)
-        
-    # Save 
-    profile_logged_in_user.save()
 
 def profile_view(request, username):
+    # Get context dictionary 
     context = get_profile_context(username)
-    profile = context.get('profile')
-    
-    # If user clicks on the follow/unfollow button
-    if request.method == "POST":
-        if 'follow_button' in request.POST:
-            # Performs the action on the user on that profile
-            follow_form_logic(request, profile, 'follow_button')
-            
-            # Refreshes the page
-            return redirect(request.META['HTTP_REFERER'])
-        elif "delete_button" in request.POST:
-            # Get Post ID 
-            post_id = request.POST['delete_button']
-            
-            # Get Post object using the Post ID
-            post_to_delete = Post.objects.get(id=post_id)
-            
-            # Delete Post
-            post_to_delete.delete()
-            return redirect(request.META['HTTP_REFERER'])
-    
     return render(request, 'social/profile_home.html', context )
     
 def followings_view(request, username):
     # Get context dictionary 
     context = get_profile_context(username)
-    profile = context.get('profile')
-    
-    # If user clicks on the follow/unfollow button
-    if request.method == "POST":
-        # If the logged in user clicks the follow button on header
-        if 'follow_button' in request.POST:
-            # Performs the action on the user on that profile
-            follow_form_logic(request, profile, 'follow_button')
-            
-        # If the logged in user clicks the follow button on a user within the list
-        elif 'follow_button2' in request.POST:
-            # Gets the target_user's profile
-            target_username = request.POST['target_user']
-            target_user = User.objects.get(username=target_username)
-            target_profile = Profile.objects.get(user=target_user)
-            
-            # Performs the action on the target user
-            follow_form_logic(request, target_profile, 'follow_button2')
-            
-            
-        # Refreshes the page
-        return redirect(request.META['HTTP_REFERER'])
     return render(request, 'social/profile_followings.html', context)
 
 
 def followers_view(request, username):
     # Get context dictionary 
     context = get_profile_context(username)
-    profile = context.get('profile')
-    
-    # Post Form logic
-    if request.method == "POST":
-        # If the logged in user clicks the follow button on header
-        if 'follow_button' in request.POST:
-            follow_form_logic(request, profile, 'follow_button')
-            
-        # If the logged in user clicks the follow button on a user within the list
-        elif 'follow_button2' in request.POST:
-            # Get current user
-            profile_logged_in_user = request.user.profile
-            
-            # Get action and target user from the form
-            action = request.POST['follow_button2']
-            
-            # Gets the target_user's profile
-            target_username = request.POST['target_user']
-            target_user = User.objects.get(username=target_username)
-            target_profile = Profile.objects.get(user=target_user)
-            
-            # Decide to follow or unfollow
-            if action == "unfollow":
-                # Unfollow user
-                profile_logged_in_user.follows.remove(target_profile)
-            elif action == "follow":
-                profile_logged_in_user.follows.add(target_profile)
-                
-            profile_logged_in_user.save()
-            
-            
-        # Refreshes the page
-        return redirect(request.META['HTTP_REFERER'])
     return render(request, 'social/profile_followers.html', context)
 
-@login_required 
-def edit_post_view(request, post_id):
-    current_post = Post.objects.get(id=post_id)
-    # Checks if the post's author matches with the current user
-    if (current_post.author == request.user):
-        if request.method == "POST":
-            form = PostForm(request.POST)
-            if form.is_valid():
-                data = Post.objects.get(id=post_id)
-                data.author = request.user
-                data.title = form.cleaned_data['title']
-                data.body = form.cleaned_data['body']
-                data.rating = form.cleaned_data['rating']
-                data.post_date = datetime.now()
-                data.save()
-                return redirect('dashboard')
-        else:
-            post = Post.objects.get(id=post_id)
-            form = PostForm()
-            return render(request, 'social/edit_post.html', {
-                'post': post
-            }) 
-    else:
-        return redirect('dashboard')
     
 @login_required 
 def like_post_view(request, post_id):
@@ -235,6 +130,31 @@ def like_post_view(request, post_id):
     
     post.save()
     return redirect(request.META['HTTP_REFERER'])
+
+@login_required
+def follow_view(request, user_id):
+    # Get target user's profile
+    target_user = User.objects.get(id=user_id)
+    target_profile = Profile.objects.get(user=target_user)
+    
+    # Get current user
+    profile_logged_in_user = request.user.profile
+    
+    # Get form data
+    action = request.POST['follow_button']
+    
+    # Decide to follow or unfollow
+    if action == "unfollow":
+        # Unfollow user
+        profile_logged_in_user.follows.remove(target_profile)
+    elif action == "follow":
+        # Follow user
+        profile_logged_in_user.follows.add(target_profile)
+        
+    # Save 
+    profile_logged_in_user.save()
+    return redirect(request.META['HTTP_REFERER'])
+    
 
 def view_post_view(request, post_id):
     post = Post.objects.get(id=post_id) 
@@ -273,3 +193,13 @@ def like_comment_view(request, comment_id):
     
     comment.save()
     return redirect(request.META['HTTP_REFERER'])
+
+@login_required 
+def delete_post_view(request, post_id):
+    post_to_delete = Post.objects.get(id=post_id) 
+    
+    if request.method == "POST":
+        # Delete Post
+        post_to_delete.delete()
+        return redirect(request.META['HTTP_REFERER'])
+    
