@@ -1,8 +1,10 @@
 {% extends 'social/base.html' %}
 
 {% block title %}
-<title>Dashboard</title>
+<title>Explore / How Was Your Day? </title>
 {% endblock title %}
+
+
 
 {% block content %}
     <!------------ LEFT CONTAINER ------------ -->
@@ -10,57 +12,16 @@
         <div class="bg-white shadow rounded overflow-hidden">
         <div class="container py-0 h-200 pt-4">
             <h2 class="mb-4">
-                <i class="fa-solid fa-rss"></i> News Feed
+                <i class="fa-solid fa-earth-americas"></i> Explore Posts
             </h2>
 
-            <!-- EACH POST STARTS -->
-            {% for post in posts %}
-                <div class="card mb-3">
-                    <h3 class="card-header">
-                        {{post.title}}
-                    </h3>
-                    <div class="card-body">
-                    
-                    <a class="no-underline" href="{% url 'user_profile' post.author%}">
-                        <div>
-                            <h5 class="card-title mb-3"> <img class="small-profile-pic" src="{{ post.author.profile.image.url}}">{{ post.author }}</h5>
-                        </div>
-                    
-                    </a>
-                    <h6 class="card-title mb-3"> {{ post.post_date }}</h6>
-                    <div class = "day_rating">
-                        <div class="day-info">
-                            <h6 class="card-subtitle text-muted"> Day Rating:</h6>
-                        </div>
-                        <div class="day-info">
-                            <div class="stars mb-3">
-                                <span class="mug fa fa-mug-hot{% if post.rating > 0 %} checked {% endif %}"></span>
-                                <span class="mug fa fa-mug-hot {% if post.rating > 1 %} checked {% endif %}"></span>
-                                <span class="mug fa fa-mug-hot {% if post.rating > 2 %} checked {% endif %}"></span>
-                                <span class="mug fa fa-mug-hot {% if post.rating > 3 %} checked {% endif %}" ></span>
-                                <span class="mug fa fa-mug-hot {% if post.rating > 4 %} checked {% endif %}"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="card-text">{{ post.body }}</p>
-
-                    <button type="button" class="btn btn-primary btn-sm">
-                        <i class="fa-regular fa-heart"></i> Like
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm">
-                        <i class="fa-regular fa-comment"></i> Comment
-                    </button>
-                    </div>
-                    <div class="card-footer text-muted">
-                    {{ post.duration }}
-                    </div>
-                </div>
-                {% endfor %}
-                <!-- EACH POST ENDS-->
+            {% include 'social/post_cards.html' %}
         
-        </div>
-    </div></div>
+        
+    </div>
+</div></div>
 {% endblock content %}
+
 
 {% block view_profile %}
 <!-- Profile Picture -->

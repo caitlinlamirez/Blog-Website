@@ -1,0 +1,74 @@
+{% extends 'social/profile_base.html' %}
+
+{% block profile_content %}
+<!-- Header-->
+<div class="w3-container">
+    <h5 class="mb-3 alignleft"> Following List</h5>
+    <a type="button" class="btn btn-secondary btn-sm alignright" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Go Back </a>
+</div>
+<br><br>
+
+<!-- List all of the followings -->
+<ul class="list-group">
+        {% for following in followings %}
+        
+            <li class="list-group-item p-3">
+                <div>
+                    <a class= "no-underline" href="{% url 'user_profile' following.user.username %}">
+                    <div class="followers">
+                        <img class="small-profile-pic alignleft" src="{{ following.user.profile.image.url}}">
+                    </div>
+                    <div class="followers">
+                        <strong>{{ following.user.first_name }} {{ following.user.last_name }}</strong><br>
+                        <small>@{{ following.user.username }}</small>
+                    </div>
+                    </a>
+
+                    <!-- If logged in user is NOT the user on the list-->
+                    {% if user.username != following.user.username %}
+
+                    <form action= "" method="POST" class="followers alignright">
+                        {% csrf_token %}
+
+                        <!-- Hidden input field that would return the user on the list's username -->
+                        <input type="hidden" id = "target" name = "target_user" value= "{{ following.user.username }}">
+                        
+                        <!-- If user on the list is in logged in user's follow list -->
+                        {% if following.user.profile in user.profile.follows.all %}
+                        <button type="submit"class="btn btn-secondary btn-sm" name="follow_button2" value="unfollow"> Unfollow</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary btn-sm" name="follow_button2" value="follow"> Follow</button>
+                        {% endif %}
+                    </form>
+                    {% endif %}
+                    
+                </div>
+                
+            </li>
+        
+        
+        {% endfor %}
+</ul>
+
+    
+{% endblock profile_content %}
+
+
+
+{% block view_profile %}
+<!-- If the logged in user is the user on the profile, do not display profile pic on side navigation -->
+{% if request.user.username == profile_user.username %}
+<li class="nav-item">
+    <a class="nav-link {% if url_name == 'followings_list' %}active{% endif %}" href="{ % url 'user_profile' user.username % }">
+        <i class="fa-solid fa-user"></i> Profile Page
+    </a>
+  </li>
+{% else %}
+<!-- Otherwise, display profile pic on side navigation -->
+<li class="profile-side">
+    <img class="profile-pic" src="{{ user.profile.image.url }}">
+    <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+    <a type="button" class="btn btn-link" href="{% url 'user_profile' user.username%}">View Profile</a>
+    </li>
+{% endif %}
+{% endblock view_profile %}

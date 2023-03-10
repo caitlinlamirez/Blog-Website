@@ -1,56 +1,9 @@
 {% extends 'social/profile_base.html' %}
 {% block profile_content %}
-<!-- USER'S POST -->
-<div class="py-4 px-4">
-    <div class="py-2">
-        <h5 class="mb-3">Recent posts</h5>
-        <!-- EACH POST CARD -->
-        {% for post in posts %}
-        <div class="card mb-3">
-            <h3 class="card-header">{{post.title}}</h3>
-            <div class="card-body">
-                <h5 class="card-title mb-3"> 
-                    <img class="small-profile-pic" src="{{ post.author.profile.image.url}}">
-                    {{ post.author }}
-                </h5>
-                <h6 class="card-title mb-3"> {{ post.post_date }}</h6>
-                <div class = "day_rating">
-                    <div class="day-info">
-                        <h6 class="card-subtitle text-muted"> Day Rating:</h6>
-                    </div>
-                    <div class="day-info">
-                        <div class="stars mb-3">
-                            <span class="mug fa fa-mug-hot{% if post.rating > 0 %} checked {% endif %}"></span>
-                            <span class="mug fa fa-mug-hot {% if post.rating > 1 %} checked {% endif %}"></span>
-                            <span class="mug fa fa-mug-hot {% if post.rating > 2 %} checked {% endif %}"></span>
-                            <span class="mug fa fa-mug-hot {% if post.rating > 3 %} checked {% endif %}" ></span>
-                            <span class="mug fa fa-mug-hot {% if post.rating > 4 %} checked {% endif %}"></span>
-                        </div>
-                    </div>
-                </div>
-                <p class="card-text">{{ post.body }}</p>
-                <button type="button" class="btn btn-primary btn-sm">
-                    <i class="fa-regular fa-heart"></i> Like
-                </button>
-                <button type="button" class="btn btn-outline-secondary btn-sm">
-                    <i class="fa-regular fa-comment"></i> Comment
-                </button>
-            </div>
-            <div class="card-footer">
-                <!-- If logged-in user matches user in profile, apply time-footer css style -->
-                <div class=" {% if request.user.username == user.username %} time-footer {% endif %} alignleft">
-                    <span class="text-muted">{{ post.duration }}</span>
-                </div>
-                <!-- If logged-in user matches user in profile, show "Edit Post" button -->
-                {% if request.user.username == user.username %}
-                <a type="button" class="btn btn-link btn-small no-underline alignright" href="{% url 'edit_post' post.pk %}">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit Post</a>  
-                {% endif %}
-            </div>
-
-        </div>
-        {% endfor %}
-        <!-- END EACH POST CARD-->
-    </div>
+<div class="py-2">
+    <h5 class="mb-3">Recent posts</h5>
+    <!-- Display the cards for each of the user's posts -->
+    {% include 'social/post_cards.html' %}
+    
 </div>
 {% endblock profile_content %}

@@ -1,6 +1,11 @@
 {% extends 'social/base.html' %}
 {% include 'social/nav_menu.html' %}
 
+{% block title %}
+<title>{{ profile_user.first_name }} {{ profile_user.last_name }} (@{{profile_user.username}}) / How Was Your Day?</title>
+{% endblock title %}
+
+
 {% block content %}
 <div class="col-lg-9">
         <!-- PROFILE WIDGET STARTS -->
@@ -41,16 +46,18 @@
                     <p>{{profile_user.profile.bio}}</p>
                 </div>
                 <div class="follow">
-                    <a type="button" class="btn btn-link no-underline" href="{% url 'follow_list' profile_user.username %}">
+                    <a type="button" class="btn btn-link no-underline" href="{% url 'followings_list' profile_user.username %}">
                         <strong>{{ following_count }}</strong> Following
                     </a>
-                    <button type="button" class="btn btn-link no-underline">
+                    <a type="button" class="btn btn-link no-underline" href="{% url 'followers_list' profile_user.username %}">
                         <strong>{{followers_count}}</strong> Followers
-                    </button>
+                    </a>
                 </div>
             </div>
+            <div class="py-4 px-4">
             {% block profile_content %}
             {% endblock profile_content %}
+            </div>
 
         </div>
         <!-- End profile widget -->

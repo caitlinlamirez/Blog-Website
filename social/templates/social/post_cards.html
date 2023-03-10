@@ -1,0 +1,109 @@
+<!-- EACH POST CARD -->
+{% for post in posts %}
+<div class="card mb-3">
+    <!-- Card Header -->
+    <a class="no-underline" href="{% url 'view_post' post.pk%}">
+        <h3 class="card-header">{{post.title}}</h3>
+    </a>
+    
+
+    <!-- Card Body -->
+    <div class="card-body">
+
+        <!-- Profile Picture and Username-->
+        <a class="no-underline" href="{% url 'user_profile' post.author%}">
+            <div>
+                <h5 class="card-title mb-3"> <img class="small-profile-pic" src="{{ post.author.profile.image.url}}">{{ post.author }}</h5>
+            </div>
+        </a>
+
+        <!-- Date-->
+        <h6 class="card-title mb-3"> {{ post.post_date}}</h6>
+
+        <!-- Day Rating-->
+        <div class = "day_rating">
+            <div class="day-info">
+                <h6 class="card-subtitle text-muted"> Day Rating:</h6>
+            </div>
+            <div class="day-info">
+                <div class="stars mb-3">
+                    <span class="mug fa fa-mug-hot{% if post.rating > 0 %} checked {% endif %}"></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 1 %} checked {% endif %}"></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 2 %} checked {% endif %}"></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 3 %} checked {% endif %}" ></span>
+                    <span class="mug fa fa-mug-hot {% if post.rating > 4 %} checked {% endif %}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Like and Comment Button-->
+        <p class="card-text">{{ post.body }}</p>
+        <!-- Like Form-->
+        <form action="{% url 'like_post' post.pk%}" method="POST">
+            {% csrf_token %}
+
+            <!-- If: logged in user already likes the post, clicking button will UNLIKE post -->
+            {% if user in post.likes.all %}
+            <button type="submit" id = "unlike_bt" name = "like_button" value = "unlike"class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-heart"></i> {{ post.likes.count }}</button>
+
+            <!-- Else: logged in user has not liked post, clicking button will LIKE post -->
+            {% else %}
+            <button type="submit" id = "like_bt" name = "like_button" value = "like"class="btn btn-outline-primary btn-sm">
+                <i class="fa-regular fa-heart"></i> {{ post.likes.count }}</button>
+            {% endif %}
+
+            <a type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'view_post' post.pk%}">
+            <i class="fa-regular fa-comment"></i> {{ post.comments.count }}
+            </a>
+        </form>
+        
+        
+    </div>
+
+
+    <!-- Card Footer-->
+    <div class="card-footer">
+
+        <!-- If logged-in user matches user in profile, apply time-footer css style -->
+        <div class=" {% if user.username == post.author.username %} time-footer {% endif %} alignleft">
+            <span class="text-muted">{{ post.duration }}</span>
+        </div>
+
+        <!-- If logged-in user matches user in profile, show Edit/Delete buttons -->
+        {% if user.username == post.author.username %}
+        <a type="button" class="btn btn-link btn-small no-underline alignright" href="{% url 'edit_post' post.pk %}"> <i class="fa-solid fa-pen-to-square"></i> Edit</a>  
+        <button type="button" class="btn btn-link btn-small no-underline alignright" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <i class="fa-solid fa-trash"></i> Delete</button>  
+
+        <!-- Delete Modal -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-dialog" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Post Deletion Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <p>Are you sure you want to delete this post?</p>
+                </div>
+                <div class="modal-footer">
+                    <!-- Delete Post Form -->
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <button type="submit" class="btn btn-primary" name="delete_button" value="{{ post.pk }}">Delete</button>
+                    </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endfor %}
+<!-- END EACH POST CARD-->
