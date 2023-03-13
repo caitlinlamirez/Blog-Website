@@ -9,7 +9,6 @@ from django.db.models.signals import post_save
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpeg',upload_to='profile_pics')
-    header = models.ImageField(default='default_header.png', upload_to='header_pics')
     bio = models.TextField(default='Welcome to my profile!', max_length=160)
     follows = models.ManyToManyField("self",
             related_name="followed_by",

@@ -1,0 +1,119 @@
+{% extends 'social/base.html' %}
+
+{% block title %}
+<title>Account Settings</title>
+{% endblock title %}
+
+{% block content %}
+
+<!-- Delete User Modal -->
+<div id="deleteUserModal" class="modal fade">
+    <div class="modal-dialog" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Account Deletion Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+        </button>
+        </div>
+        <div class="modal-body">
+        <p>Are you sure you want to delete your account? You will not be able to recover your account and posts. </p>
+        </div>
+        <div class="modal-footer">
+            <!-- Delete Post Form -->
+            <form method="POST" action="{% url 'delete_account' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" name="delete_button" value="delete">Confirm</button>
+            </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+    <!------------ LEFT CONTAINER ------------ -->
+    <div class="col-lg-9">
+        <div class="bg-white shadow rounded overflow-hidden">
+        <div class="container py-0 pt-4 pb-4 h-200">
+            <h2>
+                <i class="fa-solid fa-gear"></i> Account Settings
+            </h2>
+            
+            <!-- Displays messages if message was sent -->
+            {% if messages %}
+            <div class="alert alert-dismissible alert-success mt-3">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                {% for message in messages %}
+                <span>{{ message }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form action="{% url 'edit_account' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %} 
+                <div class="col-md-8">
+                    <div>
+                        <!-- Labels for Username and Password-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="usernameInput" class="col-form-label">Username</label>
+                                <input type="text" class="form-control" name = "username" id="usernameInput" placeholder="Username" value="{{ request.user.username }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="passwordBtn" class="col-form-label">Password</label>
+                                <br>
+                                <a type="button" name="passwordBtn" class="btn btn-primary btn-sm" href="{% url 'reset_password' %}">Reset Password</a>
+                            </div>
+                        </div>
+
+                        <!-- First/Last Name-->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="firstNameInput" class="col-form-label">First Name</label>
+                                <input type="text" class="form-control" name = "first_name" id="firstNameInput" placeholder="First Name" value= "{{ request.user.first_name }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastNameInput" class="col-form-label">Last Name</label>
+                                <input type="text" class="form-control" name = "last_name" id= "lastNameInput" placeholder="Last Name" value = "{{ request.user.last_name }}">
+                            </div>
+                        </div>
+                        <!-- Email -->
+                        <div class="row mt-2 mb-4">
+                            <div>
+                                <label for="emailInput" class="col-form-label">Email Address</label>
+                                <input type="email" class="form-control" id="emailInput" name = "email" aria-describedby="emailHelp" placeholder="Enter email" value="{{ request.user.email }}">
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <!-- Label for Delete Account -->
+                        <div class="row mt-2">
+                            <div>
+                                <label for="deleteBtn" class="col-form-label">Delete Account</label><br>
+                                <span class="col-form-text">Deleting your account will delete all of your information and posts permanently. </span>
+                                <br>
+                                <button type="button" class="btn btn-link btn-sm mt-2 btn-delete" data-bs-toggle = "modal" data-bs-target = "#deleteUserModal">Delete Account</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button-->
+                        <div class="row mt-4">
+                            <div><button type="submit" class="btn btn-primary btn-sm">Save Account Settings</button></div>
+                        </div>  
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock content %}
+
+{% block view_profile %}
+<!-- Profile Picture -->
+<li class="profile-side">
+<img class="profile-pic" src="{{ user.profile.image.url }}">
+<h5>{{ user.first_name }} {{ user.last_name }}</h5>
+<a type="button" class="btn btn-link" href="{% url 'user_profile' user.username%}">View Profile</a>
+</li>
+{% endblock view_profile %}

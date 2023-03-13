@@ -31,12 +31,12 @@ body {
     cursor: pointer;
 }
 
-input:checked ~ label, label:hover ~ label{
+.rating-day input:checked ~ label, .rating-day label:hover ~ label{
     color:rgb(255, 183, 76);
 }
 
-input:checked + label:hover, input:checked ~ label.hover, input:checked ~ label:hover ~ label,
-label:hover ~ input:checked ~ label {
+.rating-day input:checked + label:hover, .rating-day input:checked ~ label.hover, .rating-day input:checked ~ label:hover ~ label,
+.rating-day label:hover ~ input:checked ~ label {
     color:rgb(255, 183, 76);
 }
 textarea {
@@ -76,7 +76,7 @@ textarea {
     transform: translateY(5rem);
 }
 
-.edit-profile-bt {
+.profile-bt {
     transform: translateY(8rem);
 }
 
@@ -98,10 +98,10 @@ textarea {
 }
 
 .bg-header {
-    
+    background-image: url('/media/header.png');
     background-repeat:no-repeat;
     background-position: center center;
-    background-size:cover;
+    background-size: cover;
 
 }
 .follow{
@@ -225,4 +225,72 @@ a:hover{
 
 .cursor-pointer{
     cursor: pointer;
+}
+
+.modal-form{
+    width: 100%;
+    max-width: 50%;
+    margin: auto;
+}
+
+#editProfileModal {
+    top: 10%;
+}
+
+#bioTextArea {
+    height:200px;
+    width:100%;
+}
+
+.edit-profile-pic {
+    cursor:pointer;
+    border: 2px solid #ccc;
+    object-fit: cover;
+    height: 140px;
+    width:140px;
+
+}
+
+.profile-wrapper {
+    display:flex;
+    justify-content: center;
+    margin-left:50%;
+    margin-right:50%;
+    margin-bottom:5%;
+}
+
+#profile-pic-input{
+    visibility:hidden;
+}
+
+.camera {
+    font-size:40px;
+    position:absolute;
+    color:#fff;
+    top:35%;
+    left:55%;
+    filter: drop-shadow(0 0 0.1rem gray);
+    cursor: pointer;
+}
+
+.form-control {
+    font-size:14px;
+}
+
+.col-form-label {
+    font-size:14px;
+    margin-left:2px;
+    font-weight: bold;
+}
+.col-form-text {
+    margin-left:2px;
+    font-size:13px;
+}
+
+.btn-delete {
+    color:rgb(188, 37, 37);
+}
+
+li {
+    font-size:14px;
 }

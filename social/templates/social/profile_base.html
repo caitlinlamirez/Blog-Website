@@ -7,23 +7,28 @@
 
 
 {% block content %}
+
+{% include "social/edit_profile_modal.html"%}
+
 <div class="col-lg-9">
+    
         <!-- PROFILE WIDGET STARTS -->
         <div class="bg-white shadow rounded overflow-hidden">
 
-            <!-- PROFILE PIC AND HEADER PIC -->
-            <div class="px-4 pb-4 p-4 bg-header" style="background-image: url('{{ profile_user.profile.header.url }}')">
+            <!-- PROFILE PIC-->
+            <div class="px-4 pb-4 p-4 bg-header"> 
                 <div class="media align-items-end profile-header">
                     <div class="media-body">
                         <img class="pic-header" src="{{ profile_user.profile.image.url }}">
                         <!-- If the logged in user is the user on the profile, display "Edit Profile"-->
                         {% if request.user.username == profile_user.username %}
-                            <button type="button" class="btn btn-primary alignright edit-profile-bt"> Edit Profile</button>
-                        {% else %}
+                            <button type="button"  class="btn btn-primary alignright profile-bt" data-bs-toggle="modal" data-bs-target="#editProfileModal"> Edit Profile</button>
 
+                        {% else %}
+                        
 
                         <!-- Otherwise, display Follow/Unfollow Button-->
-                        <form action="{% url 'follow_user' profile_user.pk %}" method="POST" class="alignright edit-profile-bt">
+                        <form action="{% url 'follow_user' profile_user.pk %}" method="POST" class="alignright profile-bt">
                             {% csrf_token %}
                             <!-- If logged in user already follows the user on the profile display "Unfollow" -->
                             {% if profile in user.profile.follows.all %}
@@ -72,7 +77,7 @@
 <!-- If the logged in user is the user on the profile, do not display profile pic on side navigation -->
 {% if request.user.username == profile_user.username %}
 <li class="nav-item">
-    <a class="nav-link {% if url_name == 'user_profile' %}active{% endif %}" href="{ % url 'user_profile' user.username % }">
+    <a class="nav-link {% if url_name == 'user_profile' %}active{% endif %}" href="{% url 'user_profile' user.username%}">
         <i class="fa-solid fa-user"></i> Profile Page
     </a>
   </li>

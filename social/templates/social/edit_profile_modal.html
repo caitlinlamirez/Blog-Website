@@ -1,0 +1,67 @@
+<!-- Edit Profile modal -->
+<div id="editProfileModal" class="modal fade">
+    <div class="modal-dialog modal-form" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Edit profile</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+        </button>
+
+        </div>
+        <!-- Modal Body-->
+        <div class="modal-body">
+            <!-- Edit Profile Form starts here -->
+            <form action="{% url 'edit_profile' profile_user.profile.pk %}" method="POST" enctype = "multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-1 py-5">
+                        <label for="profile-pic-input">
+                            <img class="rounded-circle mt-5 edit-profile-pic" src="{{ profile_user.profile.image.url }}">
+                            <a type="button" class="btn btn-primary btn-sm mt-2">
+                                <i class="fa-solid fa-camera"></i> Update
+                            </a>
+                        </label>
+                        <input type="file" id="profile-pic-input" name="image">
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="p-3 py-5">
+                        <!-- Labels for First/Last Name-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="firstNameInput" class="col-form-label">First Name</label>
+                                <input type="text" class="form-control" name = "first_name" id="firstNameInput" placeholder="First Name" value="{{ profile_user.first_name }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastNameInput" class="col-form-label">Last Name</label>
+                                <input type="text" class="form-control" name = "last_name"id= "lastNameInput" placeholder="Last Name" value = "{{ profile_user.last_name }}">
+                            </div>
+                        </div>
+
+                        <!-- Label for Bio -->
+                        <div class="row mt-2">
+                            <div><label for="bioTextArea" class="col-form-label">Bio</label></div>
+                        </div>
+                        <!-- Bio input field-->
+                        <div class="row">
+                            <div>
+                                <textarea class="form-control" name = "bio" id="bioTextArea" rows="3" placeholder="Tell us about yourself!">{{ profile_user.profile.bio }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Footer-->
+        <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" name="save_button" value="save">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+
+    </div>
+    </div>
+</div>

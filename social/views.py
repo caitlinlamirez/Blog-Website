@@ -1,9 +1,11 @@
+from turtle import update
+from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Post, Profile, Comment
-from .forms import PostForm
-from django.contrib.auth import logout 
+from .forms import PostForm, CommentForm, ProfileForm, FullNameForm, UserAccountForm, PasswordChangingForm
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib import messages 
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -43,18 +45,12 @@ def create_post(request):
 @login_required 
 def edit_post_view(request, post_id):
     current_post = Post.objects.get(id=post_id)
-    
     # Checks if the post's author matches with the current user
     if (current_post.author == request.user):
         if request.method == "POST":
-            form = PostForm(request.POST)
+            form = PostForm(request.POST or None, instance = current_post)
             if form.is_valid():
-                data = Post.objects.get(id=post_id)
-                data.author = request.user
-                data.title = request.POST['title']
-                data.body = request.POST['body']
-                data.rating = request.POST['rating']
-                data.save()
+                form.save()
             return redirect('view_post', post_id)
         else:
             form = PostForm()
@@ -64,6 +60,7 @@ def edit_post_view(request, post_id):
             }) 
     else:
         return redirect('dashboard')
+    
     
 # Returns the context dictionary for the user profile
 def get_profile_context(username):
@@ -131,6 +128,23 @@ def like_post_view(request, post_id):
     post.save()
     return redirect(request.META['HTTP_REFERER'])
 
+@login_required 
+def add_comment_view(request, post_id):
+    post = Post.objects.get(id=post_id) 
+    if request.method == "POST":
+        form  = CommentForm(request.POST)
+        if form.is_valid():
+            print("form valid")
+            comment = Comment()
+            comment.post = post
+            comment.commenter = request.user
+            comment.body = form.cleaned_data['body']
+            comment.save()
+            return redirect('view_post', post_id)
+    else:
+        form = CommentForm()
+    return redirect('view_post', post_id)
+
 @login_required
 def follow_view(request, user_id):
     # Get target user's profile
@@ -168,16 +182,6 @@ def view_post_view(request, post_id):
     
     return render(request, 'social/view_post.html', context)
 
-@login_required 
-def add_comment_view(request, post_id):
-    post = Post.objects.get(id=post_id) 
-    if request.method == "POST":
-            comment = Comment()
-            comment.post = post
-            comment.commenter = request.user
-            comment.body = request.POST['commentBody']
-            comment.save()
-    return redirect(request.META['HTTP_REFERER'])
 
 @login_required 
 def like_comment_view(request, comment_id):
@@ -199,7 +203,65 @@ def delete_post_view(request, post_id):
     post_to_delete = Post.objects.get(id=post_id) 
     
     if request.method == "POST":
-        # Delete Post
         post_to_delete.delete()
         return redirect(request.META['HTTP_REFERER'])
     
+@login_required
+def edit_profile_view(request, profile_id):
+    user = request.user
+    profile = Profile.objects.get(id=profile_id) 
+    if request.method == "POST":
+        profile_form = ProfileForm(request.POST or None, request.FILES or None, instance = profile)
+        fullname_form = FullNameForm(request.POST or None, instance = user)
+        if profile_form.is_valid() and fullname_form.is_valid():
+            profile_form.save()
+            fullname_form.save()
+        return redirect(request.META['HTTP_REFERER']) 
+    else:
+        profile_form = ProfileForm()
+        fullname_form = FullNameForm()
+    return redirect(request.META['HTTP_REFERER']) 
+
+@login_required 
+def edit_account_view(request):
+    user = request.user
+    if request.method == "POST":
+        form = UserAccountForm(request.POST or None, instance=user) 
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Account was updated successfully!")
+        return redirect(request.META['HTTP_REFERER']) 
+    else:
+        form = UserAccountForm()
+    return render(request, 'social/edit_account.html')
+
+@login_required
+def delete_account_view(request):
+    user = request.user 
+    if request.method == "POST":
+        user.delete() 
+        messages.success(request, "Account was deleted successfully")
+        return redirect('login')
+    return render(request, 'social/edit_account.html')
+
+@login_required 
+def reset_password_view(request):
+    if request.method == "POST":
+        form = PasswordChangingForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, "Your password was successfully reset")
+            return redirect('edit_account')
+        else:
+            for error in form.errors:
+                print(form.errors[error])
+                messages.error(request, form.errors[error])
+            return redirect(request.META['HTTP_REFERER']) 
+    else:
+        form = PasswordChangingForm(user=request.user)
+    return render(request, 'social/reset_password.html')
+            
+    
+            
+            
