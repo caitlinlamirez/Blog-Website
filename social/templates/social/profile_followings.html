@@ -10,42 +10,8 @@
 
 <!-- List all of the followings -->
 <ul class="list-group">
-        {% for following in followings %}
-        
-            <li class="list-group-item p-3">
-                <div>
-                    <a class= "no-underline" href="{% url 'user_profile' following.user.username %}">
-                    <div class="followers">
-                        <img class="small-profile-pic alignleft" src="{{ following.user.profile.image.url}}">
-                    </div>
-                    <div class="followers">
-                        <strong>{{ following.user.first_name }} {{ following.user.last_name }}</strong><br>
-                        <small>@{{ following.user.username }}</small>
-                    </div>
-                    </a>
-
-                    <!-- If logged in user is NOT the user on the list-->
-                    {% if user.username != following.user.username %}
-
-
-                    <!-- Follow Form-->
-                    <form action="{% url 'follow_user' following.user.pk %}" method="POST" class="followers alignright">
-                        {% csrf_token %}
-                        <!-- If logged in user already follows the user on the profile display "Unfollow" -->
-                        {% if following.user.profile in user.profile.follows.all %}
-                        <button type="submit"class="btn btn-secondary btn-sm" name="follow_button" value="unfollow"> Unfollow</button>
-                        {% else %}
-                        <!-- Otherwise, display "Follow" -->
-                        <button type="submit" class="btn btn-primary btn-sm" name="follow_button" value="follow"> Follow</button>
-                        {% endif %}
-                    </form>
-                    {% endif %}
-                    
-                </div>
-                
-            </li>
-        
-        
+        {% for target_profile in followings %}
+        {% include 'social/profile_in_list.html' %}
         {% endfor %}
 </ul>
 

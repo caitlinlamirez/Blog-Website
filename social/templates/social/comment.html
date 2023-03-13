@@ -39,22 +39,39 @@
                 </div>
                 <div class="modal-body">
     
-                {% for user in comment.likes.all %}
-                
-                    <li class="list-group-item p-2">
+                {% for liker in comment.likes.all %}
+                <li class="list-group-item p-2">
+                    <!-- Profile picture, full name, and user name-->    
                     <div>
-                    <!-- Profile picture, full name, and user name-->
-                    <a class= "no-underline" href="{% url 'user_profile' user.username %}">
-                    <div class="followers">
-                        <img class="small-profile-pic alignleft" src="{{ user.profile.image.url}}">
+                        <a class= "no-underline" href="{% url 'user_profile' liker.username %}">
+                        <div class="followers">
+                            <img class="small-profile-pic alignleft" src="{{ liker.profile.image.url}}">
+                        </div>
+                        <div class="followers">
+                            <strong>{{ liker.first_name }} {{ liker.last_name }}</strong><br>
+                            <small>@{{ liker.username }}</small>
+                        </div>
+                        </a>
+                    
+    
+                    <!-- If logged in user is NOT the user on the list, display follow/unfollow buttons-->
+                    {% if user.username != liker.username %}
+    
+                    <!-- Follow Form -->
+                    <form action="{% url 'follow_user' liker.pk %}" method="POST" class=" alignright">
+                        {% csrf_token %}
+                        <!-- If logged in user already follows the user "Unfollow" -->
+                        {% if liker.profile in user.profile.follows.all %}
+                        <button type="submit"class="btn btn-secondary btn-sm" name="follow_button" value="unfollow"> Unfollow</button>
+                        {% else %}
+                        <!-- Otherwise, display "Follow" -->
+                        <button type="submit" class="btn btn-primary btn-sm" name="follow_button" value="follow"> Follow</button>
+                        {% endif %}
+                    </form>
+                    {% endif %}
                     </div>
-                    <div class="followers">
-                        <strong>{{ user.first_name }} {{ user.last_name }}</strong><br>
-                        <small>@{{ user.username }}</small>
-                    </div>
-                    </a>
-                    </div>
-                    </li> 
+                </li> 
+                
                 {% endfor %}
                 </div>
     

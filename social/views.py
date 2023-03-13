@@ -286,20 +286,63 @@ def search_view(request):
     # Get search query
     query = request.GET.get('query')
     
-    # Search by posts and by users
+    # Search posts by title and user
     posts_by_title = Post.objects.filter(title__contains = query)
     posts_by_user = Post.objects.filter(author__username__contains = query)
+
+    # Combine query results
     post_results = posts_by_title | posts_by_user
-    user_results = User.objects.filter(username__contains = query)
+
+    # Search for profiles
+    profile_results = Profile.objects.filter(user__username__contains = query)
 
     # Context dictionary 
     context = {
         'query': query,
         'posts': post_results,
-        'users': user_results
+        'profiles': profile_results
         
     }
     return render(request, 'social/search.html', context)
     
+@login_required 
+def friends_view(request):
+    logged_in_user = request.user
+    # If users wants to sort the posts
+    if request.method == "POST":
+
+        sort_by = request.POST.get('sortPosts')
+        
+        # Get logged in user's posts and their followed users' posts
+        logged_in_user_posts = Post.objects.filter(author = logged_in_user)
+        followings_posts = Post.objects.filter(author__profile__in = logged_in_user.profile.follows.all())
+
+        posts = logged_in_user_posts | followings_posts
+
+        if sort_by == "newest":
+            posts = posts.order_by('-post_date')
+        elif sort_by == "oldest":
+            posts = posts.order_by('post_date')
+        elif sort_by == "highest_rating":
+            posts = posts.order_by('-rating')
+        elif sort_by == "lowest_rating":
+            posts = posts.order_by('rating')
+        context = {
+            'posts': posts,
+            'selected_sort': sort_by,
+        }
+        return render(request, 'social/friends_posts.html', context)
+        
+    else:
+        # Get logged in user's posts and their followed users' posts
+        logged_in_user_posts = Post.objects.filter(author = logged_in_user)
+        followings_posts = Post.objects.filter(author__profile__in = logged_in_user.profile.follows.all())
+
+        posts = logged_in_user_posts | followings_posts
+        posts = posts.order_by('-post_date')
+        context = {
+            'posts': posts
+        }
+        return render(request, 'social/friends_posts.html', context)
             
             

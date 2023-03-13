@@ -27,7 +27,12 @@
                   <!-- Pages  -->
                   <li class="nav-item">
                     <a class="nav-link {% if url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
-                      <i class="fa-solid fa-earth-americas"></i> Explore
+                      <i class="fa-solid fa-earth-americas"></i> Explore Posts
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if url_name == 'friends_posts' %}active{% endif %}" href="{% url 'friends_posts' %}">
+                      <i class="fa-solid fa-user-group"></i> Friends Posts
                     </a>
                   </li>
                   <li class="nav-item">

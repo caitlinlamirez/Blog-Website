@@ -18,39 +18,8 @@
         </div>
         <div>
             <!-- Display list of posts -->
-            {% for user_result in users %}
-            <li class="list-group-item p-3">
-                <div>
-                    <!-- Profile picture, full name, and user name-->
-                    <a class= "no-underline" href="{% url 'user_profile' user_result.username %}">
-                    <div class="followers">
-                        <img class="small-profile-pic alignleft" src="{{ user_result.profile.image.url}}">
-                    </div>
-                    <div class="followers">
-                        <strong>{{ user_result.first_name }} {{ user_result.last_name }}</strong><br>
-                        <small>@{{ user_result.username }}</small>
-                    </div>
-                    </a>
-    
-                    <!-- If logged in user is NOT the user on the list, display follow/unfollow buttons-->
-                    {% if user.username != user_result.username %}
-    
-                    <!-- Follow Form -->
-                    <form action="{% url 'follow_user' user_result.pk %}" method="POST" class="followers alignright">
-                        {% csrf_token %}
-                        <!-- If logged in user already follows the user on the profile display "Unfollow" -->
-                        {% if user_result.profile in user.profile.follows.all %}
-                        <button type="submit"class="btn btn-secondary btn-sm" name="follow_button" value="unfollow"> Unfollow</button>
-                        {% else %}
-                        <!-- Otherwise, display "Follow" -->
-                        <button type="submit" class="btn btn-primary btn-sm" name="follow_button" value="follow"> Follow</button>
-                        {% endif %}
-                    </form>
-    
-    
-                    {% endif %}
-                </div>
-            </li>  
+            {% for target_profile in profiles %}
+            {% include 'social/profile_in_list.html' %}
             {% endfor %} 
         </div>
 
