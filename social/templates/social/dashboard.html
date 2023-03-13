@@ -8,15 +8,35 @@
 <!------------ LEFT CONTAINER -------------->
 <div class="col-lg-9">
     <div class="bg-white shadow rounded overflow-hidden">
-    <div class="container py-0 h-200 pt-4">
-        <h2 class="mb-4">
+    <div class="container py-0 h-200 pt-4 p-3">
+        <div class="row">
+            <div class="col-md-3">
+            <h2 class="mb-4">
             <i class="fa-solid fa-earth-americas"></i> Explore Posts
-        </h2>
+            </h2>
+            </div>
+
+            <div class="col-md-9">
+                <!-- Sort Posts drop down selection -->
+                <form class="form-group alignright" method="POST" action = "">
+                {% csrf_token %}
+                    <select class="form-select" id="sortPosts" name="sortPosts" onChange="form.submit();">
+                        <option selected disabled hidden>Sort Posts by</option>
+                        <option value = "newest" {% if selected_sort == "newest" %} selected {% endif %}> Newest</option>
+                        <option value = "oldest" {% if selected_sort == "oldest" %} selected {% endif %}>Oldest</option>
+                        <option value = "highest_rating" {% if selected_sort == "highest_rating" %} selected {% endif %}>Highest Day Rating</option>
+                        <option value = "lowest_rating" {% if selected_sort == "lowest_rating" %} selected {% endif %}>Lowest Day Rating</option>
+                        
+                    </select>
+                </form>
+            </div>
+            
+        </div>
+        
         <!-- Display list of posts -->
         <!-- EACH POST CARD -->
         {% for post in posts %}
         {% include 'social/post.html' %}
-        
         {% endfor %}
         <!-- END EACH POST CARD-->
     </div>

@@ -19,13 +19,33 @@ def logout_user(request):
 
 @login_required
 def dashboard_view(request):
-    # Orders Posts by Post Date
-    posts = Post.objects.all().order_by('-post_date')
-    context = {
-        'posts': posts
-    }
-    return render(request, 'social/dashboard.html', context)
+    # If users wants to sort the posts
+    if request.method == "POST":
+        sort_by = request.POST.get('sortPosts')
+        print(sort_by)
+        if sort_by == "newest":
+            posts = Post.objects.all().order_by('-post_date')
+        elif sort_by == "oldest":
+            posts = Post.objects.all().order_by('post_date')
+        elif sort_by == "highest_rating":
+            posts = Post.objects.all().order_by('-rating')
+        elif sort_by == "lowest_rating":
+            posts = Post.objects.all().order_by('rating')
+        context = {
+            'posts': posts,
+            'selected_sort': sort_by
+        }
+        return render(request, 'social/dashboard.html', context)
+        
+    else:
+        # Orders Posts by Post Date
+        posts = Post.objects.all().order_by('-post_date')
+        context = {
+            'posts': posts
+        }
+        return render(request, 'social/dashboard.html', context)
     
+
 @login_required
 def create_post(request):
     if request.method == "POST":
@@ -262,6 +282,24 @@ def reset_password_view(request):
         form = PasswordChangingForm(user=request.user)
     return render(request, 'social/reset_password.html')
             
+def search_view(request):
+    # Get search query
+    query = request.GET.get('query')
+    
+    # Search by posts and by users
+    posts_by_title = Post.objects.filter(title__contains = query)
+    posts_by_user = Post.objects.filter(author__username__contains = query)
+    post_results = posts_by_title | posts_by_user
+    user_results = User.objects.filter(username__contains = query)
+
+    # Context dictionary 
+    context = {
+        'query': query,
+        'posts': post_results,
+        'users': user_results
+        
+    }
+    return render(request, 'social/search.html', context)
     
             
             

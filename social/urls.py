@@ -19,5 +19,6 @@ urlpatterns = [
     path('account/settings', views.edit_account_view, name='edit_account'),
     path('account/delete', views.delete_account_view, name='delete_account'),
     path('account/reset_password', views.reset_password_view, name='reset_password'),
+    path('search', views.search_view, name='search')
 ]
  
