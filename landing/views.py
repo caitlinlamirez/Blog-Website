@@ -22,7 +22,7 @@ def login_user(request):
                 
             # Invalid login
             else:
-                messages.success(request, "There was an error logging in!")
+                messages.error(request, "Invalid Username/Password. Please try again.")
                 # Return an 'invalid login' error message.
                 return redirect('login')
         else:
@@ -45,7 +45,10 @@ def register_user(request):
             # Logs them in
             user = authenticate(username=username, password=password)
             login (request, user)
-            return redirect('login')
+            return redirect('dashboard')
+        else:
+            messages.error(request, form.errors)
+            return redirect('register')
     else:
         # Pass in the form
         form = RegisterUserForm() 

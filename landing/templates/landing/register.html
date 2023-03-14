@@ -1,25 +1,98 @@
 {% extends 'landing/base.html' %}
 {% block content %}
 
-<!-- REGISTER FORM-->
-{% if form.errors %}
-<div class="alert alert-dismissible alert-secondary">
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    There was an error with your form
-</div>
-{% endif %}
-{% if messages %}
-    {% for message in messages %}
-    {{message}}
-    {% endfor %}
-{% endif %}
-<form action="{% url 'register' %}" method=POST>
-  {% csrf_token %}
-  <h5>Sign up for an Account</h5>
-  {{form.as_p}}
-  <div class="text-center pt-1 mb-5 pb-1">
-    <input type="submit" class="btn btn-primary btn-block fa-lg mb-3" value="Submit">
-    <a class="btn btn-secondary btn-block fa-lg mb-3" href="{% url 'login' %}">Back</a>
+<section class="vh-200 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+          <div class="card-body p-5">
+              <div>
+                  <h2 class = "mb-5 logo"><i class="fa-solid fa-mug-hot me-3 logo"></i>Rate My Day</h2>
+                  <h4 class = "mb-3 logo"> Create a New Account</h4>
+              </div>
+
+              <!-- Displays messages if message was sent -->
+              {% if messages %}
+              {% for message in messages %}
+                  {% if 'error' in message.tags %}
+                  <div class="alert alert-dismissible alert-danger">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          {{message}}
+                  </div>
+                  {% endif %}
+              {% endfor %}
+              {% endif %}
+
+              <!-- Register form -->
+              <form method="POST" action="">
+                  {% csrf_token %}
+                  <!-- Username-->
+                  <div class="form-floating mb-4">
+                  <input required type="username" class="form-control" id="usernameInput" name="username" placeholder="Username">
+                  <label for="usernameInput">Username</label>
+                  <small id="usernameHelp" class="form-text text-muted m-1">Give yourself a unique username.</small>
+                  </div>
+
+                  <!-- First/Name Name-->
+                  <div class="mb-3">
+                    <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-floating">
+                          <input required type="text" class="form-control" id="firstNameInput" name="first_name" placeholder="First Name">
+                          <label for="firstNameInput">First Name</label>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-floating">
+                          <input required type="text" class="form-control" id= "lastNameInput" name = "last_name" placeholder="Last Name">
+                          <label for="lastNameInput">Last Name</label>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Email Address -->
+                  <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="emailInput" name="email" placeholder="Email Address">
+                    <label for="usernameInput">Email Address</label>
+                    <small id="emailHelp" class="form-text text-muted m-1">We'll never share your email with anyone else.</small>
+                  </div>
+
+                  <!-- Password 1-->
+                  <div class="form-floating">
+                    <input required type="password" class="form-control" id="passwordInput1" name="password1" placeholder="Password">
+                    <label for="passwordInput1">Password</label>
+                  </div>
+
+                  <!-- Password Rules-->
+                  <ul class = mt-3>
+                    <li>Your password cant be too similar to your other personal information.</li>
+                    <li>Your password must contain at least 8 characters.</li>
+                    <li>Your password cant be a commonly used password.</li>
+                    <li>Your password cant be entirely numeric.</li>
+                  </ul>
+
+                  <!-- Password 2 -->
+                  <div class="form-floating mb-4">
+                    <input required type="password" class="form-control" id="passwordInput2" name="password2" placeholder="Confirm Password">
+                    <label for="passwordInput2">Confirm Password</label>
+                    </div>
+
+                  <!-- Submit Button-->
+                  <button class="button-34" type="submit">Sign Up</button>
+
+                  <hr class="my-4">
+                  <span>Already have an account?
+                    <a href="{% url 'login' %}">Sign In</a>
+                  </span>
+
+              </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</form>
+</section>
 {% endblock content %}

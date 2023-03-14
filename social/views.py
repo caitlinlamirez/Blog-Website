@@ -1,15 +1,10 @@
-from turtle import update
-from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from .models import Post, Profile, Comment
 from .forms import PostForm, CommentForm, ProfileForm, FullNameForm, UserAccountForm, PasswordChangingForm
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib import messages 
 from django.contrib.auth.models import User
-from django.utils import timezone
-from datetime import datetime
 
 @login_required
 def logout_user(request):
@@ -21,16 +16,20 @@ def logout_user(request):
 def dashboard_view(request):
     # If users wants to sort the posts
     if request.method == "POST":
+        # Get all posts
+        posts = Post.objects.all()
+        # Get sort action
         sort_by = request.POST.get('sortPosts')
-        print(sort_by)
+        
         if sort_by == "newest":
-            posts = Post.objects.all().order_by('-post_date')
+            posts = posts.order_by('-post_date')
         elif sort_by == "oldest":
-            posts = Post.objects.all().order_by('post_date')
+            posts = posts.order_by('post_date')
         elif sort_by == "highest_rating":
-            posts = Post.objects.all().order_by('-rating')
+            posts = posts.order_by('-rating')
         elif sort_by == "lowest_rating":
-            posts = Post.objects.all().order_by('rating')
+            posts = posts.order_by('rating')
+            
         context = {
             'posts': posts,
             'selected_sort': sort_by
@@ -38,7 +37,7 @@ def dashboard_view(request):
         return render(request, 'social/dashboard.html', context)
         
     else:
-        # Orders Posts by Post Date
+        # Orders Posts by descending post date by default
         posts = Post.objects.all().order_by('-post_date')
         context = {
             'posts': posts
@@ -154,7 +153,6 @@ def add_comment_view(request, post_id):
     if request.method == "POST":
         form  = CommentForm(request.POST)
         if form.is_valid():
-            print("form valid")
             comment = Comment()
             comment.post = post
             comment.commenter = request.user
@@ -174,18 +172,17 @@ def follow_view(request, user_id):
     # Get current user
     profile_logged_in_user = request.user.profile
     
-    # Get form data
+    # Get follow action
     action = request.POST['follow_button']
     
     # Decide to follow or unfollow
     if action == "unfollow":
-        # Unfollow user
+       
         profile_logged_in_user.follows.remove(target_profile)
     elif action == "follow":
-        # Follow user
+        
         profile_logged_in_user.follows.add(target_profile)
         
-    # Save 
     profile_logged_in_user.save()
     return redirect(request.META['HTTP_REFERER'])
     
@@ -193,6 +190,8 @@ def follow_view(request, user_id):
 def view_post_view(request, post_id):
     post = Post.objects.get(id=post_id) 
     comments = Comment.objects.filter(post=post)
+    
+    # Order comments by descending comment date 
     comments = comments.order_by('-comment_date')
     
     context = {
@@ -308,9 +307,9 @@ def search_view(request):
 @login_required 
 def friends_view(request):
     logged_in_user = request.user
+    
     # If users wants to sort the posts
     if request.method == "POST":
-
         sort_by = request.POST.get('sortPosts')
         
         # Get logged in user's posts and their followed users' posts
@@ -338,6 +337,7 @@ def friends_view(request):
         logged_in_user_posts = Post.objects.filter(author = logged_in_user)
         followings_posts = Post.objects.filter(author__profile__in = logged_in_user.profile.follows.all())
 
+        # Order by descending post date by default 
         posts = logged_in_user_posts | followings_posts
         posts = posts.order_by('-post_date')
         context = {

@@ -1,4 +1,3 @@
-from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import *
@@ -29,18 +28,20 @@ post_save.connect(create_profile, sender=User)
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.CASCADE) # Deletes all of the user's posts if they delete the user
     rating = models.IntegerField(default=0)
-    body = models.TextField(max_length=400) 
+    body = models.TextField() 
     post_date = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(User, related_name='blog_posts')
     
     @property
     def duration(self):
         if self.post_date:
-            time  = datetime.now() 
+            time  = timezone.now() 
             if self.post_date.hour == time.hour and self.post_date.day == time.day:
+                if time.minute - self.post_date.minute < 0 :
+                    return str(time.minute - self.post_date.minute + 60) + " minutes ago"
                 if time.minute - self.post_date.minute != 1:
                     return str(time.minute - self.post_date.minute) + " minutes ago"
                 else:

@@ -1,6 +1,93 @@
+/* --------------------- LOG IN PAGE ---------------------------- */
+
+html,
 body {
-    background-color: rgb(253, 246, 255);
-  }
+  height: 100%;
+}
+
+
+h2.logo {
+    font-family: 'Lilita One', cursive;
+    font-size: 47px;
+    color: #3f4246;
+    
+}
+
+i.logo{
+    color:#ffd035;
+    filter: drop-shadow(0 0 0.05rem gray);
+}
+
+h4.logo{
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.gradient-custom {
+/* fallback for old browsers */
+background: #FFC371;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, #FF5F6D, #FFC371);
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, #FF5F6D, #FFC371)
+}
+
+.button-34{
+  background: #FF5F6D;
+  border-radius: 999px;
+  box-shadow: #FF5F6D 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  word-break: break-word;
+  border: 0;
+  text-decoration: none;
+}
+
+.button-34:hover{
+    background: #ef959c;
+}
+
+
+
+
+/* ------------------------------------------------- */
 
 .day-info {
     display: inline-block;
@@ -263,15 +350,6 @@ a:hover{
     visibility:hidden;
 }
 
-.camera {
-    font-size:40px;
-    position:absolute;
-    color:#fff;
-    top:35%;
-    left:55%;
-    filter: drop-shadow(0 0 0.1rem gray);
-    cursor: pointer;
-}
 
 .form-control {
     font-size:14px;
