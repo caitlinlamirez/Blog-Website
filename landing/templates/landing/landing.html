@@ -1,0 +1,34 @@
+{% extends 'landing/base.html' %} 
+{% block content%}
+<div class="d-flex h-100 text-center text-white gradient-custom landing-text">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+    <header class="mb-auto">
+      <div>
+        <h3 class="float-md-start mb-0 landing-logo">Rate My Day</h3>
+        <nav class="nav nav-masthead justify-content-center float-md-end">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link" href="#">Features</a>
+          <a class="nav-link" href="#">Contact</a>
+        </nav>
+      </div>
+    </header>
+    
+    <div class="card shadow-2-strong" style="border-radius: 1rem;">
+    <div class="card-body p-5">
+        <main class="px-3">
+            <h1 class = "mb-4 landing-logo"><i class="fa-solid fa-mug-hot me-3 logo"></i>Rate My Day</h1>
+            <p class="lead">Rate My Day is a social media platform where users can share their daily experiences by giving their day a rating and sharing a brief description. The platform also enables users to follow other users and interact with their posts through likes and comments. Join Rate My Day and share your daily experiences with others!</p>
+            
+            <a class="btn-landing mt-3" type="button" href="{% url 'login' %}">Enter</a>
+            
+        </main>
+    </div>
+    </div>
+  
+    <footer class="mt-auto text-white-50">
+      <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Rate My Day</p>
+    </footer>
+  </div>
+</div>
+{% endblock content %}

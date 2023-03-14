@@ -1,13 +1,13 @@
 {% extends 'landing/base.html' %} 
 {% block content%}
 <section class="vh-100 gradient-custom">
-    <div class="container py-5 h-100">
+    <div class="fade-in container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
           <div class="card shadow-2-strong" style="border-radius: 1rem;">
             <div class="card-body p-5">
                 <div>
-                    <h2 class = "mb-5 logo"><i class="fa-solid fa-mug-hot me-3 logo"></i>Rate My Day</h2>
+                    <h2 class = "mb-5 logo"><a class="no-text-decor" href="{% url 'landing' %}"><i class="fa-solid fa-mug-hot me-3 logo"></i>Rate My Day</a></h2>
                     <h4 class = "mb-3 logo"> Sign in to your account</h4>
                 </div>
 
@@ -19,7 +19,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             {{message}}
                     </div>
+                    
+
+                    {% elif 'success' in message.tags %}
+                    <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            {{message}}
+                    </div>
                     {% endif %}
+
                 {% endfor %}
                 {% endif %}
 
@@ -37,7 +45,7 @@
                     <label for="passwordInput">Password</label>
                     </div>
 
-                    <button class="button-34" type="submit">Login</button>
+                    <button class="button-34 btn-long" type="submit">Login</button>
 
                     <hr class="my-4">
                     <span>Don't have an account?
@@ -47,8 +55,13 @@
   
             </div>
           </div>
+          <footer class="mt-4 text-white-50 text-center ">
+          <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Rate My Day</p>
+          </footer>
         </div>
+        
       </div>
     </div>
   </section>
+
 {% endblock content %}

@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages 
 from .forms import RegisterUserForm
 
+def landing_view(request):
+    return render(request, 'landing/landing.html')
 
 def login_user(request):
     if not request.user.is_authenticated:
